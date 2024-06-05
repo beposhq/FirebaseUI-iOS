@@ -51,7 +51,8 @@ static const CGFloat kFooterTextViewHorizontalInset = 8.0f;
       @brief The @c UITextField that user enters email address into.
    */
   UITextField *_emailField;
-  
+  KGZEmailResetHandler _Nullable _sendEmailHandler;
+
   /** @var _tableView
       @brief The @c UITableView used to store all UI elements.
    */
@@ -59,17 +60,35 @@ static const CGFloat kFooterTextViewHorizontalInset = 8.0f;
 }
 
 - (instancetype)initWithAuthUI:(FUIAuth *)authUI
-                         email:(NSString *_Nullable)email {
+						 email:(NSString *_Nullable)email {
+  return [self initWithAuthUI:authUI email:email sendEmailHandler:NULL];
+}
+
+- (instancetype)initWithAuthUI:(FUIAuth *)authUI
+						 email:(NSString *_Nullable)email
+			  sendEmailHandler:(KGZEmailResetHandler _Nullable)sendEmailHandler {
   return [self initWithNibName:NSStringFromClass([self class])
-                        bundle:[FUIEmailAuth bundle]
-                        authUI:authUI
-                         email:email];
+						bundle:[FUIEmailAuth bundle]
+						authUI:authUI
+						 email:email
+			  sendEmailHandler:sendEmailHandler];
 }
 
 - (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil
+						 bundle:(nullable NSBundle *)nibBundleOrNil
+						 authUI:(FUIAuth *)authUI
+						  email:(NSString *_Nullable)email {
+	return [self initWithNibName:NSStringFromClass([self class])
+								 bundle:[FUIEmailAuth bundle]
+						   authUI:authUI
+							email:email
+				sendEmailHandler:NULL];
+}
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil
                          bundle:(nullable NSBundle *)nibBundleOrNil
                          authUI:(FUIAuth *)authUI
-                          email:(NSString *_Nullable)email {
+                          email:(NSString *_Nullable)email
+			   sendEmailHandler:(KGZEmailResetHandler _Nullable)sendEmailHandler {
   self = [super initWithNibName:nibNameOrNil
                          bundle:nibBundleOrNil
                          authUI:authUI];
@@ -77,6 +96,7 @@ static const CGFloat kFooterTextViewHorizontalInset = 8.0f;
     _email = [email copy];
 
     self.title = FUILocalizedString(kStr_PasswordRecoveryTitle);
+	_sendEmailHandler = sendEmailHandler;
   }
   return self;
 }

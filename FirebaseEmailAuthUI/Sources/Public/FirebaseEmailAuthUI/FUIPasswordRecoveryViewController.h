@@ -19,6 +19,7 @@
 #import <FirebaseAuthUI/FUIAuthBaseViewController.h>
 
 NS_ASSUME_NONNULL_BEGIN
+typedef void (^KGZEmailResetHandler)(NSString *_Nullable email);
 
 /** @class FUIPasswordRecoveryViewController
     @brief The view controller that asks for user's password.
@@ -49,6 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
                          authUI:(FUIAuth *)authUI
                           email:(NSString *_Nullable)email NS_DESIGNATED_INITIALIZER;
 
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil
+						 bundle:(nullable NSBundle *)nibBundleOrNil
+						 authUI:(FUIAuth *)authUI
+						  email:(NSString *_Nullable)email
+			   sendEmailHandler:(KGZEmailResetHandler _Nullable)sendEmailHandler;
 /** @fn initWithAuthUI:email:
     @brief Convenience initializer.
     @param authUI The @c FUIAuth instance that manages this view controller.
@@ -56,6 +62,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithAuthUI:(FUIAuth *)authUI
                           email:(NSString *_Nullable)email;
+/** @fn initWithAuthUI:email:
+	@brief Convenience initializer.
+	@param authUI The @c FUIAuth instance that manages this view controller.
+	@param email The email address of the user.
+ 	@param sendEmailHandler If not null, this handler will be used instead of default flow.
+ */
+- (instancetype)initWithAuthUI:(FUIAuth *)authUI
+						 email:(NSString *_Nullable)email
+			  sendEmailHandler:(KGZEmailResetHandler _Nullable)sendEmailHandler;
 
 /** @fn didChangeEmail:
     @brief Should be called after any change of email value. Updates UI controls state
